@@ -1,37 +1,13 @@
 import React, { Component } from 'react';
 import Hobbies from './components/Hobbies';
-
-
-function Greeting({name}) {
-    return "Hello " + (name ? name : 'Stranger');
-}
-
+import Time from './components/Time';
+import Greetings from './components/Greetings';
+import GitHubProfile from './components/GitHubProfile';
 // Greeting.propTypes = {
 //     name: PropTypes.string.isRequired
 // };
 
-class Time extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentTime: new Date().toString()
-        };
-    }
 
-    componentWillMount() {
-        setInterval(()=> {
-            this.setState({
-                currentTime: new Date().toString()
-            });
-        }, 1000);
-    }
-
-    render() {
-        return (
-            <div>The current time is {this.state.currentTime}</div>
-        )
-    }
-}
 
 class Application extends Component {
     constructor(props) {
@@ -40,6 +16,7 @@ class Application extends Component {
             username: 'abc'
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
     }
 
     componentDidMount() {
@@ -52,6 +29,20 @@ class Application extends Component {
         });
     }
 
+    async handleSearch(e){
+    //alert("Username is" + this.props.username);
+    const data = await fetch(`https://api.github.com/users/${this.state.username}`)
+    .then((r) => 
+        {
+            return r.json() 
+        });
+    console.log("response is " +data.name);
+    this.setState({
+        gitHubData: data
+    });
+}
+
+
     render() {
         const children = this.props.children;
         const hobbies = this.props.user.hobbies;
@@ -59,7 +50,7 @@ class Application extends Component {
         return (
             <div>
                 <h1 className="main-heading">
-                    <Greeting name={this.props.user.name}/>
+                    <Greetings name={this.props.user.name}/>
                     {this.state.username}
                     <Time />
                 </h1>
@@ -70,6 +61,11 @@ class Application extends Component {
                     defaultValue={username}
                     onChange={this.handleChange} 
                 ref={(input) => { this.textInput = input; }}/>
+                
+                <button onClick={this.handleSearch}> Search </button>
+                {
+                    this.state.gitHubData && <GitHubProfile userData={this.state.gitHubData}/>
+                }
                 <Hobbies hobbies={hobbies}/>
             </div>
         );
