@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-const Component = React.Component;
+
 
 const userData = {
     name: "Joe",
