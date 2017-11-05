@@ -4,5 +4,17 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const Component = React.Component;
+
+const userData = {
+    name: "Joe",
+    hobbies: [
+        "reading",
+        "computer games",
+        "driving"
+    ]
+};
+
+
+ReactDOM.render(<App user={userData}/>, document.getElementById('root'));
 registerServiceWorker();
